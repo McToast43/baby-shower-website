@@ -9,8 +9,8 @@ const Hero = () => {
   // Text explaing the wish list and how to claim a gift
 
   return (
-    <div className="hero">
-      <h1>Det blir en tös!!</h1>
+    <div style={{ marginLeft: "5em", marginRight: "5em" }}>
+      <h1 style={{ fontFamily: "cursive" }}>Det blir en tös!!</h1>
       <p>
         Vi vill fira att det blir en tös och bjud in er till en liten Baby
         Shower för att fira detta.
