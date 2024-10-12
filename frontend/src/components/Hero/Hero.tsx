@@ -1,3 +1,6 @@
+import { useState } from "react";
+import EnterNameModal from "../Modals/EnterName";
+
 const Hero = () => {
   // Padding to the top and bottom of the hero section
   // The text is centered
@@ -7,6 +10,8 @@ const Hero = () => {
   // Text about the event
   // Text about the date and time
   // Text explaing the wish list and how to claim a gift
+
+  const [showModal, setShowModal] = useState(true);
 
   return (
     <div style={{ marginLeft: "5em", marginRight: "5em" }}>
@@ -26,6 +31,8 @@ const Hero = () => {
         Om ni inte vill köpa något så är det helt okej, vi vill mest att ni
         kommer och firar med oss.
       </p>
+      {/* <button onClick={() => setShowModal(true)}>Enter Name</button> */}
+      {showModal && <EnterNameModal setShowModal={setShowModal} />}
     </div>
   );
 };

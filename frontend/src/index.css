@@ -77,6 +77,8 @@ button.delete:hover {
   border-radius: 4px;
   width: 80%;
   max-width: 500px;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (prefers-color-scheme: light) {

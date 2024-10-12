@@ -1,6 +1,10 @@
 import data from "../../../dummyData.json";
+import { useState } from "react";
+import ConfirmItemModal from "../Modals/ConfirmItem";
 
 const ItemList = () => {
+  const [showModal, setShowModal] = useState(false);
+
   const capitalizeFirstLetter = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
@@ -35,7 +39,17 @@ const ItemList = () => {
             <p>Inköpt: {item.claimed ? "✅" : "❌"}</p>
             {item.claimed ? <p>Inköpt av: {item.claimer}</p> : null}
             {/* On Click should open the confirm modal. For now there will be no support for unclicking :P */}
-            <input type="checkbox" defaultChecked={item.claimed} />
+            <input
+              type="checkbox"
+              defaultChecked={item.claimed}
+              onClick={() => setShowModal(true)}
+            />
+            {showModal && (
+              <ConfirmItemModal
+                setShowModal={setShowModal}
+                itemName={item.name}
+              />
+            )}
           </div>
         ))}
       </div>
