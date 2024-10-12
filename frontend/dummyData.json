@@ -1,0 +1,32 @@
+{
+  "dateOfEvent": "2021-09-01",
+  "timeOfEvent": "12:00",
+  "location": "1234 Main St, Springfield, IL 62701",
+  "guests": [
+    {
+      "name": "John Doe",
+      "email": "John.deo@gmail.com"
+    },
+    {
+      "name": "Jane Doe",
+      "email": "Jane.doe@gmail.com"
+    }
+  ],
+  "items": [
+    {
+      "name": "dipers",
+      "claimed": true,
+      "claimer": "John Doe"
+    },
+    {
+      "name": "wipes",
+      "claimed": true,
+      "claimer": "Jane Doe"
+    },
+    {
+      "name": "bottles",
+      "claimed": false,
+      "claimer": ""
+    }
+  ]
+}
