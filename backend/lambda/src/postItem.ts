@@ -1,4 +1,10 @@
-import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
+import {
+  DynamoDBDocumentClient,
+  PutCommand,
+  UpdateCommand,
+} from "@aws-sdk/lib-dynamodb";
+
+import { getItem } from "./getItems";
 import { Item, ItemNew } from "./types";
 
 //!! This function is not secure and should not be used in production
@@ -6,7 +12,11 @@ function generateRandom10DigitNumber(): number {
   return Math.floor(Math.random() * 9000000000) + 1000000000;
 }
 
-const postItem = async (docClient: DynamoDBDocumentClient, item: ItemNew) => {
+async function postItem(docClient: DynamoDBDocumentClient, item: ItemNew) {
+  if (!item.name) {
+    throw new Error("Name is required");
+  }
+
   const Item: Item = {
     claimedBy: null,
     sk: generateRandom10DigitNumber().toString(),
@@ -22,6 +32,33 @@ const postItem = async (docClient: DynamoDBDocumentClient, item: ItemNew) => {
   });
 
   await docClient.send(command);
-};
+}
 
-export { postItem };
+async function claimItem(
+  docClient: DynamoDBDocumentClient,
+  itemSk: string,
+  claimer: string
+) {
+  const exists = await getItem(docClient, "item", itemSk);
+
+  if (exists.claimed) {
+    throw new Error("Item already claimed");
+  }
+
+  const command = new UpdateCommand({
+    TableName: "babyShower",
+    Key: {
+      pk: "item",
+      sk: itemSk,
+    },
+    UpdateExpression: "SET claimedBy = :claimer, claimed = :claimed",
+    ExpressionAttributeValues: {
+      ":claimer": claimer,
+      ":claimed": true,
+    },
+  });
+
+  await docClient.send(command);
+}
+
+export { postItem, claimItem };

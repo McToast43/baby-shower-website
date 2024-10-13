@@ -1,10 +1,32 @@
-import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import {
+  DynamoDBDocumentClient,
+  QueryCommand,
+  GetCommand,
+} from "@aws-sdk/lib-dynamodb";
 import { Item } from "./types";
 
-const getItemsWithPk = async (
+async function getItem(
   docClient: DynamoDBDocumentClient,
-  pk: string
-) => {
+  pk: string,
+  sk: string
+) {
+  const command = new GetCommand({
+    TableName: "babyShower",
+    Key: {
+      pk: pk,
+      sk: sk,
+    },
+  });
+
+  const result = await docClient.send(command);
+  if (!result.Item) {
+    throw new Error("No item found");
+  }
+
+  return result.Item as Item;
+}
+
+async function getItemsWithPk(docClient: DynamoDBDocumentClient, pk: string) {
   const command = new QueryCommand({
     TableName: "babyShower",
     KeyConditionExpression: "pk = :pk",
@@ -19,6 +41,6 @@ const getItemsWithPk = async (
   }
 
   return results.Items as Item[];
-};
+}
 
-export { getItemsWithPk };
+export { getItem, getItemsWithPk };
