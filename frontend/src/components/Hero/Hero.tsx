@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNameContext } from "../../contexts/name-context";
 import EnterNameModal from "../Modals/EnterName";
 
 const Hero = () => {
@@ -11,7 +12,12 @@ const Hero = () => {
   // Text about the date and time
   // Text explaing the wish list and how to claim a gift
 
-  const [showModal, setShowModal] = useState(true);
+  const { name } = useNameContext();
+  const [showModal, setShowModal] = useState(!name);
+
+  useEffect(() => {
+    setShowModal(!name);
+  }, [name]);
 
   return (
     <div
