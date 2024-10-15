@@ -3,6 +3,7 @@ interface Item {
   sk: string;
   pk: string;
   url: string | null;
+  imgUrl: string | null;
   name: string;
   claimed: boolean;
 }

@@ -3,6 +3,7 @@ interface Item {
   sk: string;
   pk: string;
   url: string | null;
+  imgUrl: string | null;
   name: string;
   claimed: boolean;
 }
@@ -10,6 +11,7 @@ interface Item {
 interface ItemNew {
   name: string;
   url?: string;
+  imgUrl?: string;
 }
 
 export type { Item, ItemNew };

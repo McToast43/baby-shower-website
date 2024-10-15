@@ -22,6 +22,7 @@ async function postItem(docClient: DynamoDBDocumentClient, item: ItemNew) {
     sk: generateRandom10DigitNumber().toString(),
     pk: "item",
     url: item.url ? item.url : null,
+    imgUrl: item.imgUrl ? item.imgUrl : null,
     name: item.name,
     claimed: false,
   };

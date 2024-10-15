@@ -43,6 +43,7 @@ const ItemList = () => {
                 <img
                   className={style.ItemImageBox}
                   src={
+                    item?.imgUrl ??
                     "https://image-resizing.booztcdn.com/bloomingville/blo82058139_cbrown.webp?has_grey=1&has_webp=0&size=w144"
                   }
                   alt={item.name}
