@@ -8,31 +8,46 @@
   margin-right: 2em;
 
   padding: 0.5em;
-  border: 1px solid #000000;
-  border-radius: 15px;
-  background-color: #d4c4ce;
+  border-radius: 50;
+  background-color: #ffffff;
 }
 
 .Item {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
+  height: 92px;
 
   margin-top: 2px;
   margin-bottom: 2px;
   padding: 0.25em;
-  border: 1px solid #000000;
-  border-radius: 5px;
 
   font-size: 18px;
   text-align: left;
+
+  border-bottom: 1px solid gray;
+}
+
+.ItemImageBox {
+  width: 72px;
+  height: 72px;
+  margin-inline-end: 16px;
+}
+
+.Item img {
+  border-radius: 45%;
+  border-bottom-right-radius: 75%;
+  border-top: 80%;
 }
 
 .Item a {
   color: rgb(14, 14, 98);
+  text-decoration: underline;
 }
 
 .Item span {
+  color: black;
   font-weight: "600";
 }
 

@@ -38,27 +38,38 @@ const ItemList = () => {
         {/* All info of items show on a single row*/}
         {items.map((item) => (
           <div key={item.sk} className={style.Item}>
-            {item.url ? (
-              <a
-                href={item.url}
-                target="blank"
-                style={{
-                  color: item.claimed ? "GrayText" : "",
-                  textAlign: "left",
-                }}
-              >
-                <b>{capitalizeFirstLetter(item.name)}</b>
-              </a>
-            ) : (
-              <span
-                style={{
-                  color: item.claimed ? "GrayText" : "",
-                  textAlign: "left",
-                }}
-              >
-                <b>{capitalizeFirstLetter(item.name)}</b>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <span>
+                <img
+                  className={style.ItemImageBox}
+                  src={
+                    "https://image-resizing.booztcdn.com/bloomingville/blo82058139_cbrown.webp?has_grey=1&has_webp=0&size=w144"
+                  }
+                  alt={item.name}
+                />
               </span>
-            )}
+              {item.url ? (
+                <a
+                  href={item.url}
+                  target="blank"
+                  style={{
+                    color: item.claimed ? "GrayText" : "",
+                    textAlign: "left",
+                  }}
+                >
+                  {capitalizeFirstLetter(item.name)}
+                </a>
+              ) : (
+                <span
+                  style={{
+                    color: item.claimed ? "GrayText" : "",
+                    textAlign: "left",
+                  }}
+                >
+                  <b>{capitalizeFirstLetter(item.name)}</b>
+                </span>
+              )}
+            </div>
             {/* If the item is claimed, showed it as grayed out */}
             <input
               type="checkbox"
