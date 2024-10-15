@@ -42,6 +42,8 @@ async function claimItem(
   const exists = await getItem(docClient, "item", itemSk);
 
   if (exists.claimed) {
+    console.log("Item already claimed");
+    console.log(exists);
     throw new Error("Item already claimed");
   }
 

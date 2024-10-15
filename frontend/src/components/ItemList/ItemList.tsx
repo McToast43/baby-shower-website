@@ -10,6 +10,7 @@ const capitalizeFirstLetter = (string: string) => {
 
 const ItemList = () => {
   const [showModal, setShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<Item | undefined>(undefined);
   const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const ItemList = () => {
       <div className={style.ItemListContainer}>
         {/* All info of items show on a single row*/}
         {items.map((item) => (
-          <div key={item.name} className={style.Item}>
+          <div key={item.sk} className={style.Item}>
             {item.url ? (
               <a
                 href={item.url}
@@ -62,12 +63,15 @@ const ItemList = () => {
             <input
               type="checkbox"
               defaultChecked={item.claimed}
-              onClick={() => setShowModal(true)}
+              onClick={() => {
+                setSelectedItem(item);
+                setShowModal(true);
+              }}
             />
             {showModal && (
               <ConfirmItemModal
                 setShowModal={setShowModal}
-                itemName={item.name}
+                item={selectedItem}
               />
             )}
           </div>

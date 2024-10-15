@@ -9,6 +9,9 @@ function generateRandom10DigitNumber() {
     return Math.floor(Math.random() * 9000000000) + 1000000000;
 }
 async function postItem(docClient, item) {
+    if (!item.name) {
+        throw new Error("Name is required");
+    }
     const Item = {
         claimedBy: null,
         sk: generateRandom10DigitNumber().toString(),
@@ -26,6 +29,8 @@ async function postItem(docClient, item) {
 async function claimItem(docClient, itemSk, claimer) {
     const exists = await (0, getItems_1.getItem)(docClient, "item", itemSk);
     if (exists.claimed) {
+        console.log("Item already claimed");
+        console.log(exists);
         throw new Error("Item already claimed");
     }
     const command = new lib_dynamodb_1.UpdateCommand({

@@ -40,7 +40,7 @@ export const handler: Handler<
     const item = event.queryStringParameters?.item;
     const claimer = event.queryStringParameters?.claimer;
 
-    if (!item || !claimer) {
+    if (item === undefined || claimer === undefined) {
       return {
         statusCode: 400,
         body: JSON.stringify({ message: "Missing parameters" }),
@@ -49,10 +49,11 @@ export const handler: Handler<
 
     try {
       await claimItem(docClient, item, claimer);
-    } catch (error) {
+    } catch (error: Error | any) {
+      const errorMessage = error.message || "Unknown error";
       return {
         statusCode: 400,
-        body: JSON.stringify({ message: "error.message" }),
+        body: JSON.stringify({ message: errorMessage }),
       };
     }
 
