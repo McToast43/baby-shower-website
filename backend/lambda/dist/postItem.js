@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postItem = postItem;
 exports.claimItem = claimItem;
 const lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
+const crypto_1 = require("crypto");
 const getItems_1 = require("./getItems");
 //!! This function is not secure and should not be used in production
 function generateRandom10DigitNumber() {
@@ -29,6 +30,8 @@ async function postItem(docClient, item) {
 }
 async function claimItem(docClient, itemSk, claimer, claimType) {
     const exists = await (0, getItems_1.getItem)(docClient, "item", itemSk);
+    const claimerLower = claimer.toLocaleLowerCase();
+    const claimerHash = (0, crypto_1.createHash)("sha256").update(claimerLower).digest("hex");
     if (claimType === "claim" && exists.claimed) {
         console.log("Item already claimed");
         console.log(exists);
@@ -39,8 +42,7 @@ async function claimItem(docClient, itemSk, claimer, claimType) {
         console.log(exists);
         throw new Error("Item has not been claimed");
     }
-    if (claimType === "unclaim" &&
-        exists.claimedBy?.toLocaleLowerCase() !== claimer.toLocaleLowerCase()) {
+    if (claimType === "unclaim" && exists?.claimedBy !== claimerHash) {
         console.log("Item has not been claimed by you");
         console.log(exists);
         throw new Error("Item has not been claimed by you");
@@ -53,7 +55,7 @@ async function claimItem(docClient, itemSk, claimer, claimType) {
         },
         UpdateExpression: "SET claimedBy = :claimer, claimed = :claimed",
         ExpressionAttributeValues: {
-            ":claimer": claimType === "claim" ? claimer : null,
+            ":claimer": claimType === "claim" ? claimerHash : null,
             ":claimed": claimType === "claim" ? true : false,
         },
     });
