@@ -28,14 +28,23 @@ const handler = async (event) => {
     else if (method === "PUT" && path === "/items/claim") {
         const item = event.queryStringParameters?.item;
         const claimer = event.queryStringParameters?.claimer;
-        if (item === undefined || claimer === undefined) {
+        const claimType = event.queryStringParameters?.claimType;
+        if (item === undefined ||
+            claimer === undefined ||
+            claimType === undefined) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ message: "Missing parameters" }),
+            };
+        }
+        if (claimType !== "claim" && claimType !== "unclaim") {
             return {
                 statusCode: 400,
                 body: JSON.stringify({ message: "Missing parameters" }),
             };
         }
         try {
-            await (0, postItem_1.claimItem)(docClient, item, claimer);
+            await (0, postItem_1.claimItem)(docClient, item, claimer, claimType);
         }
         catch (error) {
             const errorMessage = error.message || "Unknown error";

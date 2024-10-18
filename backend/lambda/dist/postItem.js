@@ -17,6 +17,7 @@ async function postItem(docClient, item) {
         sk: generateRandom10DigitNumber().toString(),
         pk: "item",
         url: item.url ? item.url : null,
+        imgUrl: item.imgUrl ? item.imgUrl : null,
         name: item.name,
         claimed: false,
     };
@@ -26,12 +27,23 @@ async function postItem(docClient, item) {
     });
     await docClient.send(command);
 }
-async function claimItem(docClient, itemSk, claimer) {
+async function claimItem(docClient, itemSk, claimer, claimType) {
     const exists = await (0, getItems_1.getItem)(docClient, "item", itemSk);
-    if (exists.claimed) {
+    if (claimType === "claim" && exists.claimed) {
         console.log("Item already claimed");
         console.log(exists);
         throw new Error("Item already claimed");
+    }
+    if (claimType === "unclaim" && !exists.claimed) {
+        console.log("Item has not been claimed");
+        console.log(exists);
+        throw new Error("Item has not been claimed");
+    }
+    if (claimType === "unclaim" &&
+        exists.claimedBy?.toLocaleLowerCase() !== claimer.toLocaleLowerCase()) {
+        console.log("Item has not been claimed by you");
+        console.log(exists);
+        throw new Error("Item has not been claimed by you");
     }
     const command = new lib_dynamodb_1.UpdateCommand({
         TableName: "babyShower",
@@ -41,8 +53,8 @@ async function claimItem(docClient, itemSk, claimer) {
         },
         UpdateExpression: "SET claimedBy = :claimer, claimed = :claimed",
         ExpressionAttributeValues: {
-            ":claimer": claimer,
-            ":claimed": true,
+            ":claimer": claimType === "claim" ? claimer : null,
+            ":claimed": claimType === "claim" ? true : false,
         },
     });
     await docClient.send(command);

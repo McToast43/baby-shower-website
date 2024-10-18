@@ -14,15 +14,16 @@ const ConfirmItemModal = ({ setShowModal, item }: ModalProps) => {
   const { name } = useNameContext();
 
   const handleConfirm = async () => {
+    const claimStatus = item?.claimed ? "unclaim" : "claim";
+
     try {
       const response = await fetch(
-        `https://dcjxtfwogo54re36b263h2fyhm0cvfku.lambda-url.eu-west-1.on.aws/items/claim?item=${item?.sk}&claimer=${name}`,
-        //https://dcjxtfwogo54re36b263h2fyhm0cvfku.lambda-url.eu-west-1.on.aws/items/claim?claimer=Ben&item=5467465201
+        `https://dcjxtfwogo54re36b263h2fyhm0cvfku.lambda-url.eu-west-1.on.aws/items/claim?item=${item?.sk}&claimer=${name}&claimType=${claimStatus}`,
+
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            // Add any other necessary headers here
           },
         }
       );
@@ -38,22 +39,42 @@ const ConfirmItemModal = ({ setShowModal, item }: ModalProps) => {
     }
   };
 
-  return (
-    <div className="modal">
-      <div className="modal-content">
-        <h2>Bekräfta din present</h2>
-        <p>
-          Bekräfta att du vill köpa {item?.name} till de blivande föräldarna.
-        </p>
-        <div>
-          <button disabled={item === undefined} onClick={handleConfirm}>
-            Confirm
-          </button>
-          <button onClick={() => setShowModal(false)}>Cancel</button>
+  if (item?.claimed) {
+    return (
+      <div className="modal">
+        <div className="modal-content">
+          <h2>Ångra din present</h2>
+          <p>
+            Bekräfta att du <b>inte</b> längre kommer köpa {item?.name} till de
+            blivande föräldarna.
+          </p>
+          <div>
+            <button disabled={item === undefined} onClick={handleConfirm}>
+              Bekräfta
+            </button>
+            <button onClick={() => setShowModal(false)}>Avbryt</button>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="modal">
+        <div className="modal-content">
+          <h2>Bekräfta din present</h2>
+          <p>
+            Bekräfta att du vill köpa {item?.name} till de blivande föräldarna.
+          </p>
+          <div>
+            <button disabled={item === undefined} onClick={handleConfirm}>
+              Bekräfta
+            </button>
+            <button onClick={() => setShowModal(false)}>Avbryt</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 };
 
 export default ConfirmItemModal;

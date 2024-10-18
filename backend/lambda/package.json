@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build": "tsc"
+    "build": "tsc && cd dist && zip -r lambda.zip ./",
+    "deploy": "aws lambda update-function-code --function-name babyShower --zip-file fileb://dist/lambda.zip --profile bejo "
   },
   "devDependencies": {
     "@types/node": "^22.7.5",

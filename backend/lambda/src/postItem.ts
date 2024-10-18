@@ -3,6 +3,7 @@ import {
   PutCommand,
   UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
+import { createHash } from "crypto";
 
 import { getItem } from "./getItems";
 import { Item, ItemNew } from "./types";
@@ -38,14 +39,29 @@ async function postItem(docClient: DynamoDBDocumentClient, item: ItemNew) {
 async function claimItem(
   docClient: DynamoDBDocumentClient,
   itemSk: string,
-  claimer: string
+  claimer: string,
+  claimType: "claim" | "unclaim"
 ) {
   const exists = await getItem(docClient, "item", itemSk);
+  const claimerLower = claimer.toLocaleLowerCase();
+  const claimerHash = createHash("sha256").update(claimerLower).digest("hex");
 
-  if (exists.claimed) {
+  if (claimType === "claim" && exists.claimed) {
     console.log("Item already claimed");
     console.log(exists);
     throw new Error("Item already claimed");
+  }
+
+  if (claimType === "unclaim" && !exists.claimed) {
+    console.log("Item has not been claimed");
+    console.log(exists);
+    throw new Error("Item has not been claimed");
+  }
+
+  if (claimType === "unclaim" && exists?.claimedBy !== claimerHash) {
+    console.log("Item has not been claimed by you");
+    console.log(exists);
+    throw new Error("Item has not been claimed by you");
   }
 
   const command = new UpdateCommand({
@@ -56,8 +72,8 @@ async function claimItem(
     },
     UpdateExpression: "SET claimedBy = :claimer, claimed = :claimed",
     ExpressionAttributeValues: {
-      ":claimer": claimer,
-      ":claimed": true,
+      ":claimer": claimType === "claim" ? claimerHash : null,
+      ":claimed": claimType === "claim" ? true : false,
     },
   });
 

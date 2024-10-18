@@ -39,8 +39,20 @@ export const handler: Handler<
   } else if (method === "PUT" && path === "/items/claim") {
     const item = event.queryStringParameters?.item;
     const claimer = event.queryStringParameters?.claimer;
+    const claimType = event.queryStringParameters?.claimType;
 
-    if (item === undefined || claimer === undefined) {
+    if (
+      item === undefined ||
+      claimer === undefined ||
+      claimType === undefined
+    ) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ message: "Missing parameters" }),
+      };
+    }
+
+    if (claimType !== "claim" && claimType !== "unclaim") {
       return {
         statusCode: 400,
         body: JSON.stringify({ message: "Missing parameters" }),
@@ -48,7 +60,7 @@ export const handler: Handler<
     }
 
     try {
-      await claimItem(docClient, item, claimer);
+      await claimItem(docClient, item, claimer, claimType);
     } catch (error: Error | any) {
       const errorMessage = error.message || "Unknown error";
       return {
