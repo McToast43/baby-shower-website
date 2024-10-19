@@ -1,13 +1,15 @@
 import style from "./Navbar.module.css";
 import { useNameContext } from "../../contexts/name-context";
 import EnterNameModal from "../Modals/EnterName";
+import CreateItemModal from "../Modals/CreateItem";
 
 import babySvg from "../../../baby.svg";
 import { useState } from "react";
 
 const Navbar = () => {
   const { name } = useNameContext();
-  const [showModal, setShowModal] = useState(false);
+  const [showNameModal, setshowNameModal] = useState(false);
+  const [showCreateItemModal, setShowCreateItemModal] = useState(false);
 
   return (
     <header className={style.navbarContainer}>
@@ -19,13 +21,27 @@ const Navbar = () => {
         </div>
         <p
           onClick={() => {
-            setShowModal(true);
+            setshowNameModal(true);
           }}
         >
           Your name: {name.name}
         </p>
+        {name.name === "Ben" || name.name === "Arlene" ? (
+          <button
+            onClick={() => {
+              setShowCreateItemModal(true);
+            }}
+          >
+            Lägga till present
+          </button>
+        ) : (
+          <></>
+        )}
       </nav>
-      {showModal && <EnterNameModal setShowModal={setShowModal} />}
+      {showNameModal && <EnterNameModal setShowModal={setshowNameModal} />}
+      {showCreateItemModal && (
+        <CreateItemModal setShowModal={setShowCreateItemModal} />
+      )}
     </header>
   );
 };

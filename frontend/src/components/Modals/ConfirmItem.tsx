@@ -40,6 +40,7 @@ const ConfirmItemModal = ({ setShowModal, itemSk }: ModalProps) => {
       updatedItems[itemIndex] = {
         ...item,
         claimed: !item?.claimed,
+        claimedBy: name.nameSha256,
       };
       setItems(updatedItems);
 

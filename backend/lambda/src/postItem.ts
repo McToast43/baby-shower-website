@@ -34,6 +34,7 @@ async function postItem(docClient: DynamoDBDocumentClient, item: ItemNew) {
   });
 
   await docClient.send(command);
+  return Item;
 }
 
 async function claimItem(

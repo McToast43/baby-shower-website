@@ -11,6 +11,7 @@ interface Item {
 interface ItemNew {
   name: string;
   url?: string;
+  imgUrl?: string;
 }
 
 export type { Item, ItemNew };

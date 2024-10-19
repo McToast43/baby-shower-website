@@ -19,10 +19,10 @@ const handler = async (event) => {
     }
     else if (method === "POST" && path === "/items") {
         const body = JSON.parse(event.body || "{}");
-        await (0, postItem_1.postItem)(docClient, body);
+        const newItem = await (0, postItem_1.postItem)(docClient, body);
         return {
             statusCode: 202,
-            body: JSON.stringify({ message: "Item created" }),
+            body: JSON.stringify({ message: "Item created", item: newItem }),
         };
     }
     else if (method === "PUT" && path === "/items/claim") {

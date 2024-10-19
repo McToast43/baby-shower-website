@@ -30,11 +30,11 @@ export const handler: Handler<
   } else if (method === "POST" && path === "/items") {
     const body: ItemNew = JSON.parse(event.body || "{}");
 
-    await postItem(docClient, body);
+    const newItem = await postItem(docClient, body);
 
     return {
       statusCode: 202,
-      body: JSON.stringify({ message: "Item created" }),
+      body: JSON.stringify({ message: "Item created", item: newItem }),
     };
   } else if (method === "PUT" && path === "/items/claim") {
     const item = event.queryStringParameters?.item;

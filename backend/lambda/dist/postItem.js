@@ -27,6 +27,7 @@ async function postItem(docClient, item) {
         Item: Item,
     });
     await docClient.send(command);
+    return Item;
 }
 async function claimItem(docClient, itemSk, claimer, claimType) {
     const exists = await (0, getItems_1.getItem)(docClient, "item", itemSk);
