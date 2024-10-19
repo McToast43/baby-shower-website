@@ -4,6 +4,7 @@
 //Person will enter their name and click submit
 //Name will be stored in local storage or cookies
 import { useState } from "react";
+import crypto from "crypto-js";
 import { useNameContext } from "../../contexts/name-context";
 
 type ModalProps = {
@@ -13,11 +14,14 @@ type ModalProps = {
 const EnterNameModal = ({ setShowModal }: ModalProps) => {
   const { name, setName } = useNameContext();
 
-  const [inputName, setNameInput] = useState("");
+  const [inputName, setNameInput] = useState(name?.name ? name.name : "");
 
   const handleConfirm = () => {
-    localStorage.setItem("name", inputName);
-    setName(inputName);
+    const nameSha256 = crypto.SHA256(inputName.toLocaleLowerCase()).toString();
+    const newName = { name: inputName, nameSha256: nameSha256 };
+
+    localStorage.setItem("name", JSON.stringify(newName));
+    setName(newName);
     setShowModal(false);
   };
 
@@ -25,7 +29,7 @@ const EnterNameModal = ({ setShowModal }: ModalProps) => {
     <div className="modal">
       <div className="modal-content">
         <h2>Skriv in ditt namn</h2>
-        <h3>Name: {name}</h3>
+        <h3>Name: {name.name}</h3>
         <p>
           Ditt namn används för att hantera ditt val av presenter.
           <br />

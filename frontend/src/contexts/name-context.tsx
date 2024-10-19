@@ -3,10 +3,14 @@ type NameContextProviderProps = {
   children: React.ReactNode;
 };
 
-type NameContext = {
+type Name = {
   name: string;
-  setName: React.Dispatch<React.SetStateAction<string>>;
-  //setName: (name: string) => void;
+  nameSha256: string;
+};
+
+type NameContext = {
+  name: Name;
+  setName: React.Dispatch<React.SetStateAction<Name>>;
 };
 
 export const NameContext = createContext<NameContext | null>(null);
@@ -14,12 +18,20 @@ export const NameContext = createContext<NameContext | null>(null);
 export default function NameContextProvider({
   children,
 }: NameContextProviderProps) {
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState<Name>({ name: "", nameSha256: "" });
 
   useEffect(() => {
     const storedName = localStorage.getItem("name");
-    if (storedName) {
-      setName(storedName);
+    try {
+      const parsedName = storedName
+        ? JSON.parse(storedName)
+        : { name: "", nameSha256: "" };
+      if (storedName) {
+        setName(parsedName);
+      }
+    } catch (error) {
+      console.error(error);
+      setName({ name: "", nameSha256: "" });
     }
   }, []);
 

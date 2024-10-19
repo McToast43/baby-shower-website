@@ -16,7 +16,7 @@ const Hero = () => {
   const [showModal, setShowModal] = useState(!name);
 
   useEffect(() => {
-    setShowModal(!name);
+    setShowModal(!name.name);
   }, [name]);
 
   return (

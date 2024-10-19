@@ -2,6 +2,7 @@ import style from "./ItemList.module.css";
 
 import { useState } from "react";
 import { useItemsContext } from "../../contexts/items-context";
+import { useNameContext } from "../../contexts/name-context";
 
 import ConfirmItemModal from "../Modals/ConfirmItem";
 import { Item } from "../../types";
@@ -15,6 +16,7 @@ const ItemList = () => {
   const [selectedItem, setSelectedItem] = useState<Item | undefined>(undefined);
 
   const { items } = useItemsContext();
+  const { name } = useNameContext();
 
   return (
     <div style={{ marginBottom: "5em" }}>
@@ -60,6 +62,7 @@ const ItemList = () => {
             <input
               type="checkbox"
               checked={item.claimed}
+              disabled={item.claimed && item.claimedBy !== name.nameSha256}
               onClick={() => {
                 setSelectedItem(item);
                 setShowModal(true);

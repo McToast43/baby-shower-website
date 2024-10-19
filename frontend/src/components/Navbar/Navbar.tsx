@@ -22,7 +22,7 @@ const Navbar = () => {
             setShowModal(true);
           }}
         >
-          Your name: {name}
+          Your name: {name.name}
         </p>
       </nav>
       {showModal && <EnterNameModal setShowModal={setShowModal} />}

@@ -10,7 +10,7 @@
 
   padding: 0.5em;
   border-radius: 50;
-  background-color: #ffffff;
+  background-color: #363636;
 }
 
 .Item {
@@ -43,15 +43,50 @@
 }
 
 .Item a {
-  color: rgb(14, 14, 98);
+  color: rgb(218, 218, 238);
   text-decoration: underline;
 }
-
 .Item span {
-  color: black;
+  /* color: black; */
   font-weight: "600";
 }
 
 .Item input {
   margin-left: 10px;
+  margin-right: 10px;
+  width: 24px; /* Adjust the width as needed */
+  height: 24px; /* Adjust the height as needed */
+  transform: scale(1.5); /* Scale the checkbox */
+  border: 2px solid #ccc; /* Border styling */
+  border-radius: 4px; /* Rounded corners */
+}
+
+.Item input:disabled:hover::after {
+  content: "Du kan bara avmarkera presenter som du har köpt"; /* Tooltip text */
+  position: absolute;
+  top: -30px; /* Adjust as needed */
+  right: 0; /* Align to the right edge of the checkbox */
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 12px;
+  z-index: 10;
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (prefers-color-scheme: light) {
+  .ItemListContainer {
+    background-color: #f9f9f9;
+  }
+
+  .Item {
+    background-color: #f9f9f9;
+  }
+
+  .Item a {
+    color: rgb(14, 14, 98);
+  }
 }
