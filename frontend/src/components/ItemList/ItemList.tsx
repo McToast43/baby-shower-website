@@ -1,6 +1,8 @@
 import style from "./ItemList.module.css";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useItemsContext } from "../../contexts/items-context";
+
 import ConfirmItemModal from "../Modals/ConfirmItem";
 import { Item } from "../../types";
 
@@ -11,29 +13,12 @@ const capitalizeFirstLetter = (string: string) => {
 const ItemList = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Item | undefined>(undefined);
-  const [items, setItems] = useState<Item[]>([]);
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      const response = await fetch(
-        "https://dcjxtfwogo54re36b263h2fyhm0cvfku.lambda-url.eu-west-1.on.aws/items",
-        {
-          method: "GET",
-        }
-      );
-      const data = await response.json();
-      setItems(data);
-    };
-
-    fetchItems();
-  }, []);
-
-  //const items = request.then((response) => response.json());
+  const { items } = useItemsContext();
 
   return (
     <div style={{ marginBottom: "5em" }}>
       <h2>Present lista</h2>
-      <p>Här är en lista med presenter som vi önskar oss</p>
       <div className={style.ItemListContainer}>
         {/* All info of items show on a single row*/}
         {items.map((item) => (
@@ -74,7 +59,7 @@ const ItemList = () => {
             {/* If the item is claimed, showed it as grayed out */}
             <input
               type="checkbox"
-              defaultChecked={item.claimed}
+              checked={item.claimed}
               onClick={() => {
                 setSelectedItem(item);
                 setShowModal(true);
@@ -83,7 +68,7 @@ const ItemList = () => {
             {showModal && (
               <ConfirmItemModal
                 setShowModal={setShowModal}
-                item={selectedItem}
+                itemSk={selectedItem?.sk}
               />
             )}
           </div>

@@ -3,15 +3,19 @@
 //Will show the name of the item and the name of the person who is claiming it
 //Options to confirm or cancel
 import { useNameContext } from "../../contexts/name-context";
-import { Item } from "../../types";
+import { useItemsContext } from "../../contexts/items-context";
 
 type ModalProps = {
   setShowModal: (value: boolean) => void;
-  item: Item | undefined;
+  itemSk: string | undefined;
 };
 
-const ConfirmItemModal = ({ setShowModal, item }: ModalProps) => {
+const ConfirmItemModal = ({ setShowModal, itemSk }: ModalProps) => {
   const { name } = useNameContext();
+  const { items, setItems } = useItemsContext();
+
+  const itemIndex = items.findIndex((i) => i.sk === itemSk);
+  const item = items[itemIndex];
 
   const handleConfirm = async () => {
     const claimStatus = item?.claimed ? "unclaim" : "claim";
@@ -31,6 +35,13 @@ const ConfirmItemModal = ({ setShowModal, item }: ModalProps) => {
       if (response.status !== 202) {
         throw new Error("Failed to claim item");
       }
+
+      const updatedItems = [...items];
+      updatedItems[itemIndex] = {
+        ...item,
+        claimed: !item?.claimed,
+      };
+      setItems(updatedItems);
 
       setShowModal(false);
     } catch (error) {
