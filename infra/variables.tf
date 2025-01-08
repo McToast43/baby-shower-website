@@ -13,12 +13,12 @@ variable "aws_account_id" {
 #   description = "The ID of the Route53 zone"
 # }
 
-# variable "domain" {
-#   type        = string
-#   description = "The domain name for your Route53 zone"
+variable "domain" {
+  type        = string
+  description = "The domain name for your Route53 zone"
 
-#   validation {
-#     condition     = can(regex("^((?:([a-z0-9]\\.|[a-z0-9][a-z0-9\\-]{0,61}[a-z0-9])\\.)+)([a-z0-9]{2,63}|(?:[a-z0-9][a-z0-9\\-]{0,61}[a-z0-9]))\\.?$", var.domain))
-#     error_message = "The domain name must be a valid domain, e.g., example.com"
-#   }
-# }
+  validation {
+    condition     = can(regex("^((?:([a-z0-9]\\.|[a-z0-9][a-z0-9\\-]{0,61}[a-z0-9])\\.)+)([a-z0-9]{2,63}|(?:[a-z0-9][a-z0-9\\-]{0,61}[a-z0-9]))\\.?$", var.domain))
+    error_message = "The domain name must be a valid domain, e.g., example.com"
+  }
+}

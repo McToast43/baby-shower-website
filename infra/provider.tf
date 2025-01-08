@@ -24,6 +24,6 @@ provider "aws" {
 
 //Provider for us-east-1 used only for ACM in cloud front
 provider "aws" {
-  alias  = "us-east-1"
+  alias  = "us_east_1"
   region = "us-east-1"
 }
