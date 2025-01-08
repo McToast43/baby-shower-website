@@ -35,9 +35,12 @@ resource "aws_cloudfront_distribution" "frontend_cloudfront" {
   }
   default_root_object = "index.html"
 
-  #TODO changed to use alias and acm cert for custom domain
+  #The custom domain for our website
+  aliases = [var.domain]
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn      = aws_acm_certificate_validation.frontend.certificate_arn
+    minimum_protocol_version = "TLSv1.2_2021"
+    ssl_support_method       = "sni-only"
   }
 
   restrictions {
