@@ -23,3 +23,32 @@ resource "aws_cloudwatch_log_group" "gift_api_function" {
   name              = "/aws/lambda/${aws_lambda_function.gift_api_function.function_name}"
   retention_in_days = 60
 }
+
+#Dynamo DB 
+resource "aws_dynamodb_table" "gift_app" {
+  name         = "gift_app"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "pk"
+  range_key    = "sk"
+
+  attribute {
+    name = "pk"
+    type = "S"
+  }
+
+  attribute {
+    name = "sk"
+    type = "S"
+  }
+
+  point_in_time_recovery {
+    enabled = true
+  }
+  #Putting a limit in throughput to the DB to limit potential cost.
+  on_demand_throughput {
+    max_read_request_units  = 10
+    max_write_request_units = 20
+  }
+
+  deletion_protection_enabled = false #TODO Enable for production
+}
